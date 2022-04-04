@@ -1,17 +1,11 @@
 #include <iostream>
-#include <fstream>
 #include <string>
-#include <list>
-#include <iterator>
-#include <sstream>
 
 #include "BinarySearchTree.cpp"
 #include "SeparateChain.cpp"
 #include "Student.cpp"
 
 using namespace std;
-
-// TODO: update() and printTree()
 
 int main() {
     cout << "Assignment 04 Nick Voss:" << endl;
@@ -25,8 +19,10 @@ int main() {
     tree.insert(15, bob);
     tree.insert(65, rachel);
 
-    Student<string> nickUpdated("Nick", "Voss", "Art", "1.0");
-    tree.update(5, nickUpdated);
-    tree.printNodeInfo(5);
+//    Student<string> nickUpdated("Nick", "Voss", "Art", "1.0");
+//    tree.update(5, nickUpdated);
+//    tree.printNodeInfo(5);
+
+    tree.printTree();
     return 0;
 }

@@ -35,6 +35,7 @@ public:
 
     void setGPA(Comparable gpa);
 
+    string toString();
 };
 
 #endif

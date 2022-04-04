@@ -61,8 +61,6 @@ private:
 
     BinaryNode *findMax(BinaryNode *t) const;
 
-    BinaryNode *getNodeByID(const Comparable &x) const;
-
     bool contains(const Comparable &x, BinaryNode *t) const;
 
     void insert(const Comparable &x, Student<string> &val, BinaryNode *&t);
@@ -92,7 +90,6 @@ public:
 
     void printTree(ostream &out = cout);
 
-    BinaryNode *getNodeByID(const Comparable &x, BinaryNode *t) const;
 };
 
 #endif

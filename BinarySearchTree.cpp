@@ -233,14 +233,7 @@ void BinarySearchTree<Comparable>::remove(const Comparable &x, BinaryNode *&t) {
  */
 template<typename Comparable>
 bool BinarySearchTree<Comparable>::update(const Comparable &x, Student<string> &student) {
-    if (!contains(x)) {
-        cout << "Didn't find any student with ID " << x << "." << endl;
-        return false;
-    }
-
-    BinaryNode *node = getNodeByID(x);
-
-    return update(x, node->student, root);
+    return update(x, student, root);
 }
 
 /**
@@ -254,6 +247,7 @@ bool BinarySearchTree<Comparable>::update(const Comparable &x, Student<string> &
 template<typename Comparable>
 bool BinarySearchTree<Comparable>::update(const Comparable &x, Student<string> &student, BinaryNode *&t) {
     if (t == nullptr) {
+        cout << "Didn't find any student with ID " << x << "." << endl;
         return false;
     } else if (x < t->element) {
         return update(x, student, t->left);
@@ -265,26 +259,6 @@ bool BinarySearchTree<Comparable>::update(const Comparable &x, Student<string> &
     }
 }
 
-template<typename Comparable>
-typename BinarySearchTree<Comparable>::BinaryNode
-*BinarySearchTree<Comparable>::getNodeByID(const Comparable &x) const {
-    getNodeByID(x, root);
-}
-
-template<typename Comparable>
-typename BinarySearchTree<Comparable>::BinaryNode *
-BinarySearchTree<Comparable>::getNodeByID(const Comparable &x, BinaryNode *t) const {
-    if (t == nullptr) {
-        return nullptr;
-    } else if (x < t->element) {
-        return getNodeByID(x, t->left);
-    } else if (t->element < x) {
-        return getNodeByID(x, t->right);
-    } else {
-        return t;
-    }
-}
-
 /**
  * Print out the node information (student information) if x is
  * found in the tree, and return true.
@@ -292,13 +266,7 @@ BinarySearchTree<Comparable>::getNodeByID(const Comparable &x, BinaryNode *t) co
  */
 template<typename Comparable>
 bool BinarySearchTree<Comparable>::printNodeInfo(const Comparable &x) const {
-    if (!contains(x)) {
-        cout << "The student with ID " << x << " wasn't found in the tree." << endl;
-        return false;
-    }
-
-    printNodeInfo(x, getNodeByID(x));
-    return true;
+    return printNodeInfo(x, root);
 }
 
 /**
@@ -308,14 +276,19 @@ bool BinarySearchTree<Comparable>::printNodeInfo(const Comparable &x) const {
  * Otherwise, print "Node x was not found", and return false.
  */
 template<typename Comparable>
-bool BinarySearchTree<Comparable>
-::printNodeInfo(const Comparable &x, BinaryNode *node) const {
-    Student<string> student = node->student;
-    cout << "Student name: " << student.getFirstName() << " " << student.getLastName() << endl;
-    cout << "Department: " << student.getDepartment() << endl;
-    cout << "GPA: " << student.getGPA() << endl;
-    return true;
+bool BinarySearchTree<Comparable>::printNodeInfo(const Comparable &x, BinaryNode *t) const {
+    if (t == nullptr) {
+        cout << "The student with ID " << x << " wasn't found in the tree." << endl;
+        return false;
+    } else if (x < t->element) {
+        return printNodeInfo(x, t->left);
+    } else if (t->element < x) {
+        return printNodeInfo(x, t->right);
+    } else {
+        cout << t->student.toString() << endl;
+    }
 }
+
 
 /**
  * Print the tree contents in sorted order.
@@ -325,7 +298,7 @@ void BinarySearchTree<Comparable>::printTree(ostream &out) {
     if (isEmpty()) {
         cout << "Empty tree" << endl;
     } else {
-        printTree(root, true);
+        printTree(root, out);
     }
 }
 
@@ -337,9 +310,9 @@ void BinarySearchTree<Comparable>::printTree(ostream &out) {
  */
 template<typename Comparable>
 void BinarySearchTree<Comparable>::printTree(BinaryNode *t, ostream &out) {
-    if (t != t->left) {
-        cout << "(" << t->element << ", " << t->value << ")  ";
-        printTree(t->left);
-        printTree(t->right);
+    if (t != nullptr) {
+        cout << t->student.toString() << endl;
+        printTree(t->left, out);
+        printTree(t->right, out);
     }
 }
