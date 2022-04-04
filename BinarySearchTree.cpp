@@ -35,7 +35,8 @@ BinarySearchTree<Comparable>::~BinarySearchTree() {
  * Internal method to clone subtree.
  */
 template<typename Comparable>
-typename BinarySearchTree<Comparable>::BinaryNode *BinarySearchTree<Comparable>::clone(BinaryNode *t) const {
+typename BinarySearchTree<Comparable>::BinaryNode
+*BinarySearchTree<Comparable>::clone(BinaryNode *t) const {
     if (t == nullptr)
         return nullptr;
     else
@@ -78,7 +79,8 @@ void BinarySearchTree<Comparable>::makeEmpty(BinaryNode *&t) const {
  * Throw UnderflowException if empty.
  */
 template<typename Comparable>
-typename BinarySearchTree<Comparable>::BinaryNode *BinarySearchTree<Comparable>::findMin() const {
+typename BinarySearchTree<Comparable>::BinaryNode
+*BinarySearchTree<Comparable>::findMin() const {
     if (isEmpty()) {
         throw UnderflowException();
     }
@@ -91,15 +93,15 @@ typename BinarySearchTree<Comparable>::BinaryNode *BinarySearchTree<Comparable>:
  * Return node containing the smallest item.
  */
 template<typename Comparable>
-typename BinarySearchTree<Comparable>::BinaryNode *BinarySearchTree<Comparable>::findMin(BinaryNode *t) const {
+typename BinarySearchTree<Comparable>::BinaryNode
+*BinarySearchTree<Comparable>::findMin(BinaryNode *t) const {
     BinaryNode *ptr = root;
 
     while (ptr->left != nullptr) {
         ptr = ptr->left;
     }
 
-    splay(ptr->element, root);
-    return ptr->element;
+    return ptr;
 }
 
 /**
@@ -108,7 +110,8 @@ typename BinarySearchTree<Comparable>::BinaryNode *BinarySearchTree<Comparable>:
  * Return node containing the largest item.
  */
 template<typename Comparable>
-typename BinarySearchTree<Comparable>::BinaryNode *BinarySearchTree<Comparable>::findMax() const {
+typename BinarySearchTree<Comparable>::BinaryNode
+*BinarySearchTree<Comparable>::findMax() const {
     if (isEmpty()) {
         throw UnderflowException();
     }
@@ -121,15 +124,15 @@ typename BinarySearchTree<Comparable>::BinaryNode *BinarySearchTree<Comparable>:
  * Return node containing the largest item.
  */
 template<typename Comparable>
-typename BinarySearchTree<Comparable>::BinaryNode *BinarySearchTree<Comparable>::findMax(BinaryNode *t) const {
+typename BinarySearchTree<Comparable>::BinaryNode
+*BinarySearchTree<Comparable>::findMax(BinaryNode *t) const {
     BinaryNode *ptr = root;
 
     while (ptr->right != nullptr) {
         ptr = ptr->right;
     }
 
-    splay(ptr->element, root);
-    return ptr->element;
+    return ptr;
 }
 
 /**
@@ -178,16 +181,12 @@ template<typename Comparable>
 void BinarySearchTree<Comparable>::insert(const Comparable &x, Student<string> &student, BinaryNode *&t) {
     if (t == nullptr) {
         t = new BinaryNode(x, student, nullptr, nullptr);
-    }
-
-    if (x < t->element) {
+    } else if (x < t->element) {
         insert(x, student, t->left);
-    }
-    if (t->element < x) {
+    } else if (t->element < x) {
         insert(x, student, t->right);
     }
 
-    update(x, student);
 }
 
 /**
@@ -227,7 +226,6 @@ void BinarySearchTree<Comparable>::remove(const Comparable &x, BinaryNode *&t) {
         delete temp;
     }
 
-    balance(t);
 }
 
 /**
@@ -235,12 +233,19 @@ void BinarySearchTree<Comparable>::remove(const Comparable &x, BinaryNode *&t) {
  */
 template<typename Comparable>
 bool BinarySearchTree<Comparable>::update(const Comparable &x, Student<string> &student) {
-    return update(x, student, root);
+    if (!contains(x)) {
+        cout << "Didn't find any student with ID " << x << "." << endl;
+        return false;
+    }
+
+    BinaryNode *node = getNodeByID(x);
+
+    return update(x, node->student, root);
 }
 
 /**
  * Internal method to update a node whose element (id) equals x in a subtree.
- * If found, the node whose element is x is updated, i.e., the corresponding student information
+ * If found, the node whole element is x is updated, i.e., the corresponding student information
  * stored in this node is updated with the information stored in val, and return true, otherwise return false
  * x is the item to be found.
  * t is the node that roots the subtree.
@@ -267,8 +272,8 @@ typename BinarySearchTree<Comparable>::BinaryNode
 }
 
 template<typename Comparable>
-typename BinarySearchTree<Comparable>::BinaryNode
-*BinarySearchTree<Comparable>::getNodeByID(const Comparable &x, BinaryNode *t) const {
+typename BinarySearchTree<Comparable>::BinaryNode *
+BinarySearchTree<Comparable>::getNodeByID(const Comparable &x, BinaryNode *t) const {
     if (t == nullptr) {
         return nullptr;
     } else if (x < t->element) {
@@ -303,9 +308,10 @@ bool BinarySearchTree<Comparable>::printNodeInfo(const Comparable &x) const {
  * Otherwise, print "Node x was not found", and return false.
  */
 template<typename Comparable>
-bool BinarySearchTree<Comparable>::printNodeInfo(const Comparable &x, BinaryNode *node) const {
+bool BinarySearchTree<Comparable>
+::printNodeInfo(const Comparable &x, BinaryNode *node) const {
     Student<string> student = node->student;
-    cout << "Student name: " << student.getFirstName() << " " << student.getLastName();
+    cout << "Student name: " << student.getFirstName() << " " << student.getLastName() << endl;
     cout << "Department: " << student.getDepartment() << endl;
     cout << "GPA: " << student.getGPA() << endl;
     return true;

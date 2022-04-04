@@ -17,7 +17,6 @@ public:
     Student(string firstName, string lastName, string department, string gpa)
             : fname{std::move(firstName)}, lname{std::move(lastName)},
               department{std::move(department)}, gpa{std::move(gpa)} {
-
     }
 
     string getFirstName();
