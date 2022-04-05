@@ -40,7 +40,7 @@ typename BinarySearchTree<Comparable>::BinaryNode
     if (t == nullptr)
         return nullptr;
     else
-        return new BinaryNode{t->element, t->val, clone(t->left), clone(t->right)};
+        return new BinaryNode{t->element, t->student, clone(t->left), clone(t->right)};
 }
 
 /**

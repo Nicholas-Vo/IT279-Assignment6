@@ -12,7 +12,7 @@ HashTable<HashedObj>::HashTable(int size) : currentSize{0} {
  */
 template<typename HashedObj>
 size_t HashTable<HashedObj>::myHash(const HashedObj &x) const {
-    return x % currentSize;
+    return x % theLists.size();
 }
 
 /**
@@ -33,16 +33,17 @@ size_t HashTable<HashedObj>::hash(const HashedObj &key) const {
  */
 template<typename HashedObj>
 bool HashTable<HashedObj>::insert(const HashedObj &x, Student<string> &student) {
-    BinarySearchTree<HashedObj> &theList = theLists[myHash(x)];
-    if (find(begin(theList), end(theList), x) != end(theList)) {
+    BinarySearchTree<HashedObj> &bst = theLists[myHash(x)];
+
+    if (bst.contains(x)) {
         return false;
     }
 
-    theList.insert(x, student);
+    bst.insert(x, student);
 
-    if (++currentSize > theLists.size() / 2) {
-        // rehash()?
-    }
+//    if (++currentSize > theLists.size() / 2) {
+//        // rehash()?
+//    }
     return true;
 }
 
@@ -54,7 +55,7 @@ template<typename HashedObj>
 bool HashTable<HashedObj>::update(const HashedObj &x, Student<string> &s) {
     BinarySearchTree<HashedObj> &bst = theLists[myHash(x)];
 
-    if (find(begin(bst), end(bst), x) != end(bst)) {
+    if (!bst.contains(x)) {
         cout << x << " was not found." << endl;
         return false;
     }
@@ -70,13 +71,11 @@ bool HashTable<HashedObj>::update(const HashedObj &x, Student<string> &s) {
 template<typename HashedObj>
 bool HashTable<HashedObj>::remove(const HashedObj &x) {
     BinarySearchTree<HashedObj> &bst = theLists[myHash(x)];
-    int itr = find(begin(bst), end(bst), x);
-
-    if (itr == end(bst)) {
+    if (!bst.contains(x)) {
         return false;
     }
 
-    bst.remove(itr);
+    bst.remove(x);
     --currentSize;
     return true;
 }
@@ -91,7 +90,7 @@ bool HashTable<HashedObj>::remove(const HashedObj &x) {
 template<typename HashedObj>
 bool HashTable<HashedObj>::printNodeInfo(const HashedObj &x) {
     BinarySearchTree<HashedObj> &bst = theLists[myHash(x)];
-    if (find(begin(bst), end(bst), x) != end(bst)) {
+    if (!bst.contains(x)) {
         cout << x << " was not found." << endl;
         return false;
     }
@@ -105,10 +104,8 @@ bool HashTable<HashedObj>::printNodeInfo(const HashedObj &x) {
  */
 template<typename HashedObj>
 void HashTable<HashedObj>::displayHash() {
-    for (auto &tree: theLists) {
-        for (HashedObj &obj: tree) {
-            cout << obj << endl;
-        }
+    for (auto &bst: theLists) {
+        bst.printTree();
     }
 }
 
