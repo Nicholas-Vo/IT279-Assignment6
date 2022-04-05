@@ -43,8 +43,8 @@ void Student<Comparable>::setGPA(Comparable gpa) {
 template<typename Comparable>
 string Student<Comparable>::toString() {
     return "Student name: " + fname + " " + lname +
-           "\nDepartment: " + department +
-           "\nGPA: " + gpa;
+           " Department: " + department +
+           " GPA: " + gpa;
 }
 
 

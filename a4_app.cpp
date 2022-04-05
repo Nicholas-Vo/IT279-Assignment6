@@ -27,9 +27,14 @@ int main() {
 
     HashTable<int> t;
 
+    Student<string> edward("Edward", "Snowden", "Cyber Security", "3.8");
+    Student<string> donald("Donald", "Duck", "Chemistry", "3.0");
+
     t.insert(5, nick);
     t.insert(102, bob);
     t.insert(77, rachel);
+    t.insert(155, edward);
+    t.insert(91, donald);
 
     cout << "ID 5 before: " << endl;
     t.printNodeInfo(5);
@@ -39,6 +44,6 @@ int main() {
     cout << "ID 5 after: " << endl;
     t.printNodeInfo(5);
     cout << "Printing entire hash:" << endl;
-    //table.displayHash();
+    t.displayHash();
     return 0;
 }

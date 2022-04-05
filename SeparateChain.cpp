@@ -12,7 +12,7 @@ HashTable<HashedObj>::HashTable(int size) : currentSize{0} {
  */
 template<typename HashedObj>
 size_t HashTable<HashedObj>::myHash(const HashedObj &x) const {
-    return x % theLists.size();
+    return hash(x) % theLists.size();
 }
 
 /**
@@ -20,8 +20,6 @@ size_t HashTable<HashedObj>::myHash(const HashedObj &x) const {
  */
 template<typename HashedObj>
 size_t HashTable<HashedObj>::hash(const HashedObj &key) const {
-//    std::hash<int> hashInt;
-//    return hashInt(key);
     return key;
 }
 
@@ -104,8 +102,9 @@ bool HashTable<HashedObj>::printNodeInfo(const HashedObj &x) {
  */
 template<typename HashedObj>
 void HashTable<HashedObj>::displayHash() {
-    for (auto &bst: theLists) {
-        bst.printTree();
+    for (int i = 0; i < theLists.size(); i++) {
+        cout << i + 1<< " ";
+        theLists[i].printTree();
     }
 }
 
@@ -114,7 +113,7 @@ void HashTable<HashedObj>::displayHash() {
  */
 template<typename HashedObj>
 void HashTable<HashedObj>::makeEmpty() {
-    for (auto list: theLists) {
-        list.makeEmpty();
+    for (auto &bst: theLists) {
+        bst.makeEmpty();
     }
 }
