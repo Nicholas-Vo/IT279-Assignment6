@@ -1,11 +1,37 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 
 #include "BinarySearchTree.cpp"
 #include "SeparateChain.cpp"
 #include "Student.cpp"
 
 using namespace std;
+
+void readFromFile(HashTable<int> &table) {
+    ifstream file("enroll_test.txt");
+    string studentID;
+    string firstName;
+    string lastName;
+    string dept;
+    string gpa;
+
+    if (file.is_open()) {
+        while (!file.eof()) {
+            getline(file, studentID, ' ');
+            getline(file, firstName, ' ');
+            getline(file, lastName, ' ');
+            getline(file, dept, ' ');
+            getline(file, gpa, ' ');
+
+            Student<string> student(firstName, lastName, dept, gpa);
+            table.insert(stoi(studentID), student);
+        }
+        file.close();
+    } else {
+        cout << "Couldn't find the file enroll_test.txt!" << endl;
+    }
+}
 
 int main() {
     cout << "Assignment 04 Nick Voss:" << endl;
@@ -19,7 +45,7 @@ int main() {
 //    tree.insert(15, bob);
 //    tree.insert(65, rachel);
 
-   Student<string> nickUpdated("Nick", "Voss", "Art", "1.0");
+    Student<string> nickUpdated("Nick", "Voss", "Art", "1.0");
 //    tree.update(5, nickUpdated);
 //    tree.printNodeInfo(5);
 

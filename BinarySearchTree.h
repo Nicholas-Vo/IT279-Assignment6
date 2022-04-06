@@ -35,7 +35,7 @@ public:
     BinarySearchTree();
 
     BinarySearchTree(const BinarySearchTree &rhs); // Copy constructor
-    BinarySearchTree(BinarySearchTree &&rhs);      // Move constructor
+    BinarySearchTree(BinarySearchTree &&rhs) noexcept; // Move constructor
     ~BinarySearchTree();                           // Destructor for the tree
 
     // Copy assignment
@@ -46,7 +46,7 @@ public:
     }
 
     // Move assignment
-    BinarySearchTree &operator=(BinarySearchTree &&rhs) {
+    BinarySearchTree &operator=(BinarySearchTree &&rhs) noexcept {
         std::swap(root, rhs.root);
         return *this;
     }

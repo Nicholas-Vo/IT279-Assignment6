@@ -32,7 +32,6 @@ size_t HashTable<HashedObj>::hash(const HashedObj &key) const {
 template<typename HashedObj>
 bool HashTable<HashedObj>::insert(const HashedObj &x, Student<string> &student) {
     BinarySearchTree<HashedObj> &bst = theLists[myHash(x)];
-
     if (bst.contains(x)) {
         return false;
     }
@@ -52,7 +51,6 @@ bool HashTable<HashedObj>::insert(const HashedObj &x, Student<string> &student) 
 template<typename HashedObj>
 bool HashTable<HashedObj>::update(const HashedObj &x, Student<string> &s) {
     BinarySearchTree<HashedObj> &bst = theLists[myHash(x)];
-
     if (!bst.contains(x)) {
         cout << x << " was not found." << endl;
         return false;
