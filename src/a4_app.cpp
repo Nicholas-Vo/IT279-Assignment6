@@ -2,7 +2,6 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include <functional>
 #include <list>
 
 #include "BinarySearchTree.cpp"
@@ -11,70 +10,42 @@
 
 using namespace std;
 
-void insertStudentsFromFile(HashTable<int> &table, const string &fileName) {
-    ifstream file(fileName);
-    string studentID, firstName, lastName, dept, gpa;
-
-    stringstream stream;
-    stream << file.rdbuf(); // Read buffer
-
-    while (stream.good()) {
-        stream >> studentID; // Load data from stringstream
-        stream >> firstName;
-        stream >> lastName;
-        stream >> dept;
-        stream >> gpa;
-
-        Student<string> student(firstName, lastName, dept, gpa);
-        table.insert(stoi(studentID), student);
-    }
-
-    file.close();
-    cout << endl;
-    table.displayHash();
-    cout << endl;
-}
-
-void readStudentIDFromFile(HashTable<int> &table, const string &fileName) {
-    ifstream file(fileName);
+list<int> getIds(HashTable<int> &t, const string &fileName) {
+    ifstream file("data/" + fileName);
     string studentID;
+
     stringstream stream;
     stream << file.rdbuf(); // Read buffer
 
-    cout << "Search results: " << endl;
+    // list of ID, Student pairs to fill
+    list<int> data;
+
     while (stream >> studentID) {
-        table.printNodeInfo(stoi(studentID));
+        //stream >> studentID; // Load data from stringstream
+        data.push_back(stoi(studentID));
     }
 
-    file.close();
-    cout << endl;
+    return data;
 }
 
-void updateStudents(HashTable<int> &table, const string &fileName) {
-    ifstream file(fileName);
+list<pair<int, Student<string>>> getStudents(HashTable<int> &t, const string &fileName) {
+    ifstream file("data/" + fileName);
     string studentID, firstName, lastName, dept, gpa;
 
     stringstream stream;
     stream << file.rdbuf(); // Read buffer
 
-    cout << "Students who were successfully updated: " << endl;
-    while (stream.good()) {
-        stream >> studentID; // Load data from stringstream
-        stream >> firstName;
-        stream >> lastName;
-        stream >> dept;
-        stream >> gpa;
+    // list of ID, Student pairs to fill
+    list<pair<int, Student<string>>> data;
 
+    while (stream >> studentID >> firstName >> lastName >> dept >> gpa) {
         Student<string> student(firstName, lastName, dept, gpa);
 
-        int theID = stoi(studentID);
-        if (table.update(theID, student)) {
-            table.printNodeInfo(theID);
-        }
+        data.emplace_back(stoi(studentID), student);
     }
 
     file.close();
-    cout << endl;
+    return data;
 }
 
 int main() {
@@ -82,14 +53,51 @@ int main() {
     HashTable<int> table(7);
 
     // Question 4 part A
-    insertStudentsFromFile(table, "data/enroll_test.txt");
+    for (auto &p: getStudents(table, "enroll_test.txt")) {
+        table.insert(p.first, p.second);
+    }
+    cout << endl;
 
     // Question 4 part B & C
-    readStudentIDFromFile(table, "data/search_test1.txt");
-    readStudentIDFromFile(table, "data/search_test2.txt");
+    cout << "Searching..." << endl;
+    for (auto &id: getIds(table, "search_test1.txt")) {
+        table.printNodeInfo(id);
+    }
+    cout << endl;
+
+    cout << "Searching..." << endl;
+    for (auto &id: getIds(table, "search_test2.txt")) {
+        table.printNodeInfo(id);
+    }
+    cout << endl;
 
     // Question 4 part D
-    updateStudents(table, "data/update_test.txt");
+    cout << "Updated: " << endl;
+    for (auto &p: getStudents(table, "update_test.txt")) {
+        if (table.update(p.first, p.second)) {
+            table.printNodeInfo(p.first);
+        }
+    }
+    cout << endl;
+
+    // Question 4 part E
+    cout << "Deleted:" << endl;
+    for (auto &id: getIds(table, "remove_test.txt")) {
+        if (table.printNodeInfo(id)) {
+            table.remove(id);
+        }
+    }
+    cout << endl;
+
+    // Question 4 part f
+    cout << "Updated hash table: " << endl;
+    table.displayHash();
+    cout << endl;
+
+    // Question 4 part g
+    cout << "After emptying:" << endl;
+    table.makeEmpty();
+    table.displayHash();
     return 0;
 }
 

@@ -1,3 +1,4 @@
+#include <list>
 #include "SeparateChain.h"
 
 using namespace std;
@@ -37,10 +38,6 @@ bool HashTable<HashedObj>::insert(const HashedObj &x, Student<string> &student) 
     }
 
     bst.insert(x, student);
-
-//    if (++currentSize > theLists.size() / 2) {
-//        // rehash()?
-//    }
     return true;
 }
 
@@ -100,8 +97,8 @@ bool HashTable<HashedObj>::printNodeInfo(const HashedObj &x) {
  */
 template<typename HashedObj>
 void HashTable<HashedObj>::displayHash() {
-    for (int i = 0; i < theLists.size(); i++) {
-        cout << i + 1 << " ";
+    for (unsigned int i = 0; i < theLists.size(); i++) {
+        cout << i << " -> ";
         theLists[i].printTree();
     }
 }

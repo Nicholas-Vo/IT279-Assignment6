@@ -186,7 +186,6 @@ void BinarySearchTree<Comparable>::insert(const Comparable &x, Student<string> &
     } else if (t->element < x) {
         insert(x, student, t->right);
     }
-
 }
 
 /**
@@ -211,21 +210,17 @@ void BinarySearchTree<Comparable>::remove(const Comparable &x, BinaryNode *&t) {
 
     if (x < t->element) {
         remove(x, t->left);
-        return;
-    } else if (x > t->element) {
+    } else if (t->element < x) {
         remove(x, t->right);
-        return;
     } else if (t->left != nullptr && t->right != nullptr) {
         t->element = findMin(t->right)->element;
         remove(t->element, t->right);
-        return;
     } else {
         BinaryNode *temp = t;
 
         t = t->left == nullptr ? t->right : t->left;
         delete temp;
     }
-
 }
 
 /**
@@ -288,8 +283,8 @@ bool BinarySearchTree<Comparable>::printNodeInfo(const Comparable &x, BinaryNode
         Student<string> s = t->student;
         cout << x << " " << s.getFirstName() + " " + s.getLastName()
                             + " " + s.getDepartment() + " " + s.getGPA() << endl;
+        return true;
     }
-    return false;
 }
 
 
